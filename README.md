@@ -145,7 +145,6 @@ quadrantChart
 | **UC07** | Thanh toán chuyến đi |
 | **UC08** | Đánh giá tài xế |
 
----
 
 ## 2. Tài xế
 
@@ -157,7 +156,7 @@ quadrantChart
 | **UC11** | Chấp nhận / Từ chối chuyến |
 | **UC12** | Cập nhật trạng thái chuyến |
 
----
+
 
 ## 3. Nhân viên vận hành
 
@@ -171,7 +170,6 @@ quadrantChart
 | **UC17** | Tra cứu lịch sử giao dịch |
 | **UC18** | Xử lý sự cố chuyến đi |
 
----
 
 ## 4. Ban lãnh đạo
 
@@ -180,7 +178,6 @@ quadrantChart
 | **UC02** | Đăng nhập |
 | **UC19** | Xem báo cáo hoạt động |
 
----
 
 ## 5. Hệ thống bên ngoài
 
@@ -189,9 +186,8 @@ quadrantChart
 | **UC20** | Xử lý thanh toán điện tử | Nhà cung cấp thanh toán |
 | **UC21** | Gửi thông báo | Nhà cung cấp thông báo |
 
----
 
-## 📌 Tổng hợp
+##  Tổng hợp
 
 | Nhóm | Use Case |
 |---|---:|
@@ -216,12 +212,12 @@ flowchart LR
     %% ACTORS
     %% =========================
 
-    Customer["👤 Khách hàng"]
-    Driver["🚗 Tài xế"]
-    Staff["🧑‍💼 Nhân viên vận hành"]
-    Management["🏢 Ban lãnh đạo"]
-    Payment["💳 Nhà cung cấp thanh toán"]
-    Notification["🔔 Nhà cung cấp thông báo"]
+    Customer[" Khách hàng"]
+    Driver[" Tài xế"]
+    Staff[" Nhân viên vận hành"]
+    Management[" Ban lãnh đạo"]
+    Payment[" Nhà cung cấp thanh toán"]
+    Notification[" Nhà cung cấp thông báo"]
 
     %% =========================
     %% CAB SYSTEM
@@ -309,6 +305,7 @@ flowchart LR
     %% =========================
 
     Payment --- UC20
+
     Notification --- UC21
 
     %% =========================
