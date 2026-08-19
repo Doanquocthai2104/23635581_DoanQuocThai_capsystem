@@ -128,3 +128,197 @@ quadrantChart
 | **BR-06: Thông báo** | • **FR-06.1:** Gửi thông báo khi yêu cầu đặt xe được tiếp nhận.<br>• **FR-06.2:** Gửi thông báo khi tài xế nhận chuyến và khi trạng thái chuyến thay đổi.<br>• **FR-06.3:** Gửi thông báo về kết quả thanh toán.<br>• **FR-06.4:** Gửi thông báo cho tài xế về chuyến mới hoặc thay đổi liên quan đến chuyến. |
 | **BR-07: Quản lý vận hành** | • **FR-07.1:** Cho phép nhân viên quản lý khách hàng, tài xế và phương tiện.<br>• **FR-07.2:** Cho phép nhân viên theo dõi chuyến đang diễn ra và trạng thái tài xế.<br>• **FR-07.3:** Cho phép nhân viên tra cứu lịch sử chuyến và giao dịch.<br>• **FR-07.4:** Hỗ trợ nhân viên xử lý các trường hợp chuyến bị lỗi. |
 | **BR-08: Bảo mật & dữ liệu** | • **FR-08.1:** Yêu cầu xác thực người dùng trước khi sử dụng chức năng yêu cầu tài khoản.<br>• **FR-08.2:** Phân quyền người dùng theo vai trò.<br>• **FR-08.3:** Bảo vệ thông tin cá nhân, dữ liệu vị trí và dữ liệu giao dịch.<br>• **FR-08.4:** Lưu vết các thao tác quản trị quan trọng. |
+
+
+# Danh sách Use Case CAB System
+
+## 1. Khách hàng
+
+| ID | Use Case |
+|---|---|
+| **UC01** | Đăng ký tài khoản |
+| **UC02** | Đăng nhập |
+| **UC03** | Quản lý thông tin cá nhân |
+| **UC04** | Đặt xe |
+| **UC05** | Theo dõi chuyến đi |
+| **UC06** | Xem lịch sử chuyến đi |
+| **UC07** | Thanh toán chuyến đi |
+| **UC08** | Đánh giá tài xế |
+
+---
+
+## 2. Tài xế
+
+| ID | Use Case |
+|---|---|
+| **UC02** | Đăng nhập |
+| **UC09** | Quản lý thông tin tài xế và phương tiện |
+| **UC10** | Quản lý trạng thái hoạt động và vị trí |
+| **UC11** | Chấp nhận / Từ chối chuyến |
+| **UC12** | Cập nhật trạng thái chuyến |
+
+---
+
+## 3. Nhân viên vận hành
+
+| ID | Use Case |
+|---|---|
+| **UC02** | Đăng nhập |
+| **UC13** | Quản lý khách hàng |
+| **UC14** | Quản lý tài xế |
+| **UC15** | Quản lý phương tiện |
+| **UC16** | Theo dõi chuyến đi |
+| **UC17** | Tra cứu lịch sử giao dịch |
+| **UC18** | Xử lý sự cố chuyến đi |
+
+---
+
+## 4. Ban lãnh đạo
+
+| ID | Use Case |
+|---|---|
+| **UC02** | Đăng nhập |
+| **UC19** | Xem báo cáo hoạt động |
+
+---
+
+## 5. Hệ thống bên ngoài
+
+| ID | Use Case | Actor |
+|---|---|---|
+| **UC20** | Xử lý thanh toán điện tử | Nhà cung cấp thanh toán |
+| **UC21** | Gửi thông báo | Nhà cung cấp thông báo |
+
+---
+
+## 📌 Tổng hợp
+
+| Nhóm | Use Case |
+|---|---:|
+| Khách hàng | 8 |
+| Tài xế | 5 *(bao gồm UC02 dùng chung)* |
+| Nhân viên vận hành | 7 *(bao gồm UC02 dùng chung)* |
+| Ban lãnh đạo | 2 *(bao gồm UC02 dùng chung)* |
+| Hệ thống bên ngoài | 2 |
+| **Tổng số Use Case thực tế** | **21** |
+
+### Các Use Case dùng chung
+
+- **UC02 – Đăng nhập:** Khách hàng, Tài xế, Nhân viên vận hành, Ban lãnh đạo.
+- **UC20 – Xử lý thanh toán điện tử:** được sử dụng khi khách hàng thanh toán bằng phương thức điện tử.
+- **UC21 – Gửi thông báo:** phục vụ thông báo cho khách hàng, tài xế và các sự kiện quan trọng của hệ thống.
+## Use Case Diagram – CAB System
+
+```mermaid
+flowchart LR
+
+    %% =========================
+    %% ACTORS
+    %% =========================
+
+    Customer["👤 Khách hàng"]
+    Driver["🚗 Tài xế"]
+    Staff["🧑‍💼 Nhân viên vận hành"]
+    Management["🏢 Ban lãnh đạo"]
+    Payment["💳 Nhà cung cấp thanh toán"]
+    Notification["🔔 Nhà cung cấp thông báo"]
+
+    %% =========================
+    %% CAB SYSTEM
+    %% =========================
+
+    subgraph CAB["CAB SYSTEM"]
+
+        %% ===== CUSTOMER =====
+        UC01(["UC01 - Đăng ký tài khoản"])
+        UC02(["UC02 - Đăng nhập"])
+        UC03(["UC03 - Quản lý thông tin cá nhân"])
+        UC04(["UC04 - Đặt xe"])
+        UC05(["UC05 - Theo dõi chuyến đi"])
+        UC06(["UC06 - Xem lịch sử chuyến đi"])
+        UC07(["UC07 - Thanh toán chuyến đi"])
+        UC08(["UC08 - Đánh giá tài xế"])
+
+        %% ===== DRIVER =====
+        UC09(["UC09 - Quản lý thông tin tài xế và phương tiện"])
+        UC10(["UC10 - Quản lý trạng thái hoạt động và vị trí"])
+        UC11(["UC11 - Chấp nhận / Từ chối chuyến"])
+        UC12(["UC12 - Cập nhật trạng thái chuyến"])
+
+        %% ===== OPERATION STAFF =====
+        UC13(["UC13 - Quản lý khách hàng"])
+        UC14(["UC14 - Quản lý tài xế"])
+        UC15(["UC15 - Quản lý phương tiện"])
+        UC16(["UC16 - Theo dõi chuyến đi"])
+        UC17(["UC17 - Tra cứu lịch sử giao dịch"])
+        UC18(["UC18 - Xử lý sự cố chuyến đi"])
+
+        %% ===== MANAGEMENT =====
+        UC19(["UC19 - Xem báo cáo hoạt động"])
+
+        %% ===== EXTERNAL SERVICES =====
+        UC20(["UC20 - Xử lý thanh toán điện tử"])
+        UC21(["UC21 - Gửi thông báo"])
+
+    end
+
+    %% =========================
+    %% CUSTOMER ASSOCIATIONS
+    %% =========================
+
+    Customer --- UC01
+    Customer --- UC02
+    Customer --- UC03
+    Customer --- UC04
+    Customer --- UC05
+    Customer --- UC06
+    Customer --- UC07
+    Customer --- UC08
+
+    %% =========================
+    %% DRIVER ASSOCIATIONS
+    %% =========================
+
+    Driver --- UC02
+    Driver --- UC09
+    Driver --- UC10
+    Driver --- UC11
+    Driver --- UC12
+
+    %% =========================
+    %% OPERATION STAFF ASSOCIATIONS
+    %% =========================
+
+    Staff --- UC02
+    Staff --- UC13
+    Staff --- UC14
+    Staff --- UC15
+    Staff --- UC16
+    Staff --- UC17
+    Staff --- UC18
+
+    %% =========================
+    %% MANAGEMENT ASSOCIATIONS
+    %% =========================
+
+    Management --- UC02
+    Management --- UC19
+
+    %% =========================
+    %% EXTERNAL SYSTEM ASSOCIATIONS
+    %% =========================
+
+    Payment --- UC20
+    Notification --- UC21
+
+    %% =========================
+    %% INCLUDE RELATIONSHIPS
+    %% =========================
+
+    UC07 -.->|<<include>>| UC20
+
+    UC04 -.->|<<include>>| UC21
+    UC07 -.->|<<include>>| UC21
+    UC11 -.->|<<include>>| UC21
+    UC12 -.->|<<include>>| UC21
+    UC18 -.->|<<include>>| UC21
