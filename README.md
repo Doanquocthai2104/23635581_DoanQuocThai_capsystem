@@ -1007,24 +1007,39 @@ flowchart TD
 
 | ID Quy tắc | Tên Business Rule | Đối tượng áp dụng | Phân tích quy tắc nghiệp vụ |
 |---|---|---|---|
-| **RULE-01** | Xác thực người dùng | Khách hàng, Tài xế, Nhân viên vận hành, Ban lãnh đạo | Người dùng phải đăng nhập trước khi sử dụng các chức năng yêu cầu tài khoản. |
-| **RULE-02** | Phân quyền người dùng | Người dùng hệ thống | Người dùng chỉ được thực hiện các chức năng phù hợp với vai trò được cấp. |
-| **RULE-03** | Thông tin đặt xe | Khách hàng | Yêu cầu đặt xe phải có điểm đón, điểm đến và loại xe. |
-| **RULE-04** | Tạo chuyến đi | Hệ thống CAB | Chỉ yêu cầu đặt xe có thông tin hợp lệ mới được tạo thành chuyến đi. |
-| **RULE-05** | Điều kiện tìm tài xế | Hệ thống CAB, Tài xế | Chỉ tài xế đang sẵn sàng và phù hợp mới được xem xét nhận chuyến. |
-| **RULE-06** | Ưu tiên tài xế | Hệ thống CAB | Hệ thống ưu tiên tài xế phù hợp và gần khách hàng. |
-| **RULE-07** | Tài xế từ chối chuyến | Hệ thống CAB, Tài xế | Nếu tài xế từ chối chuyến, hệ thống tiếp tục tìm tài xế khác. |
-| **RULE-08** | Tài xế không phản hồi | Hệ thống CAB, Tài xế | Nếu tài xế không phản hồi, hệ thống tiếp tục tìm tài xế khác. |
-| **RULE-09** | Không tìm được tài xế | Hệ thống CAB, Khách hàng | Nếu không tìm được tài xế phù hợp, hệ thống phải thông báo cho khách hàng. |
-| **RULE-10** | Cập nhật trạng thái chuyến | Tài xế | Tài xế phải cập nhật trạng thái chuyến trong quá trình thực hiện. |
-| **RULE-11** | Hoàn thành chuyến | Tài xế, Hệ thống CAB | Chuyến đi chỉ được chuyển sang bước tính cước sau khi được xác nhận hoàn thành. |
-| **RULE-12** | Tính cước chuyến đi | Hệ thống CAB | Hệ thống phải xác định số tiền khách hàng phải trả sau khi chuyến hoàn thành. |
-| **RULE-13** | Phương thức thanh toán | Khách hàng | Khách hàng có thể thanh toán bằng tiền mặt hoặc thanh toán điện tử. |
-| **RULE-14** | Thanh toán điện tử | Khách hàng, Nhà cung cấp thanh toán | Thanh toán điện tử được xử lý thông qua nhà cung cấp thanh toán bên ngoài. |
-| **RULE-15** | Ghi nhận giao dịch | Hệ thống CAB | Hệ thống phải ghi nhận trạng thái và kết quả của giao dịch thanh toán. |
-| **RULE-16** | Thanh toán thất bại | Khách hàng, Hệ thống CAB | Khi thanh toán thất bại, hệ thống phải thông báo cho khách hàng và xử lý theo chính sách doanh nghiệp. |
-| **RULE-17** | Gửi thông báo | Hệ thống CAB, Nhà cung cấp thông báo | Các sự kiện quan trọng của chuyến đi phải được thông báo đến người liên quan. |
-| **RULE-18** | Đánh giá tài xế | Khách hàng | Khách hàng chỉ thực hiện đánh giá tài xế sau khi chuyến đi hoàn thành. |
-| **RULE-19** | Quản lý vận hành | Nhân viên vận hành | Nhân viên vận hành chỉ được quản lý khách hàng, tài xế, phương tiện và chuyến đi theo quyền được cấp. |
-| **RULE-20** | Bảo vệ dữ liệu | Hệ thống CAB | Thông tin cá nhân, dữ liệu vị trí và dữ liệu giao dịch phải được bảo vệ. |
+| **RULE-01** | Đăng ký tài khoản | Khách hàng | Khách hàng phải cung cấp đầy đủ thông tin cần thiết và thông tin hợp lệ để tạo tài khoản. |
+| **RULE-02** | Xác thực người dùng | Khách hàng, Tài xế, Nhân viên vận hành, Ban lãnh đạo | Người dùng phải đăng nhập trước khi sử dụng các chức năng yêu cầu tài khoản. |
+| **RULE-03** | Phân quyền người dùng | Khách hàng, Tài xế, Nhân viên vận hành, Ban lãnh đạo | Người dùng chỉ được truy cập các chức năng phù hợp với vai trò được cấp. |
+| **RULE-04** | Quản lý thông tin cá nhân | Khách hàng | Khách hàng chỉ được cập nhật và quản lý thông tin cá nhân của chính mình. |
+| **RULE-05** | Thông tin đặt xe | Khách hàng | Yêu cầu đặt xe phải có điểm đón, điểm đến và loại xe. |
+| **RULE-06** | Tạo chuyến đi | Hệ thống CAB | Chỉ yêu cầu đặt xe có thông tin hợp lệ mới được tạo thành chuyến đi. |
+| **RULE-07** | Điều kiện tìm tài xế | Hệ thống CAB, Tài xế | Chỉ tài xế đang ở trạng thái sẵn sàng và đáp ứng điều kiện phù hợp mới được xem xét nhận chuyến. |
+| **RULE-08** | Ưu tiên tài xế | Hệ thống CAB | Hệ thống ưu tiên tài xế phù hợp dựa trên vị trí và các tiêu chí vận hành. |
+| **RULE-09** | Tài xế từ chối chuyến | Hệ thống CAB, Tài xế | Khi tài xế từ chối chuyến, hệ thống phải ghi nhận phản hồi và tiếp tục tìm tài xế khác. |
+| **RULE-10** | Tài xế không phản hồi | Hệ thống CAB, Tài xế | Khi tài xế không phản hồi, hệ thống phải ghi nhận và tiếp tục tìm tài xế khác. |
+| **RULE-11** | Không tìm được tài xế | Hệ thống CAB, Khách hàng | Nếu không tìm được tài xế phù hợp, hệ thống phải thông báo cho khách hàng. |
+| **RULE-12** | Quản lý trạng thái tài xế | Tài xế, Hệ thống CAB | Tài xế phải cập nhật trạng thái hoạt động để hệ thống xác định khả năng nhận chuyến. |
+| **RULE-13** | Quản lý vị trí tài xế | Tài xế, Hệ thống CAB | Vị trí của tài xế phải được cập nhật để phục vụ việc tìm kiếm và theo dõi chuyến. |
+| **RULE-14** | Nhận hoặc từ chối chuyến | Tài xế | Tài xế chỉ có thể chấp nhận hoặc từ chối chuyến được hệ thống gửi đến. |
+| **RULE-15** | Cập nhật trạng thái chuyến | Tài xế | Tài xế phải cập nhật trạng thái chuyến trong quá trình thực hiện. |
+| **RULE-16** | Hoàn thành chuyến | Tài xế, Hệ thống CAB | Chuyến đi chỉ được chuyển sang bước tính cước sau khi được cập nhật trạng thái hoàn thành. |
+| **RULE-17** | Theo dõi chuyến đi | Khách hàng | Khách hàng chỉ được theo dõi các chuyến đi liên quan đến tài khoản của mình. |
+| **RULE-18** | Hiển thị thông tin chuyến | Khách hàng, Hệ thống CAB | Hệ thống phải cung cấp trạng thái chuyến và thông tin tài xế, phương tiện liên quan cho khách hàng. |
+| **RULE-19** | Lịch sử chuyến đi | Khách hàng | Khách hàng chỉ được xem lịch sử các chuyến đi thuộc tài khoản của mình. |
+| **RULE-20** | Tính cước chuyến đi | Hệ thống CAB | Hệ thống phải xác định số tiền khách hàng phải trả sau khi chuyến đi hoàn thành. |
+| **RULE-21** | Phương thức thanh toán | Khách hàng | Khách hàng có thể thanh toán bằng tiền mặt hoặc thanh toán điện tử. |
+| **RULE-22** | Thanh toán điện tử | Khách hàng, Nhà cung cấp thanh toán | Giao dịch thanh toán điện tử được xử lý thông qua nhà cung cấp thanh toán bên ngoài. |
+| **RULE-23** | Ghi nhận giao dịch | Hệ thống CAB | Hệ thống phải ghi nhận trạng thái và kết quả của mỗi giao dịch thanh toán. |
+| **RULE-24** | Thanh toán thất bại | Khách hàng, Hệ thống CAB | Khi thanh toán điện tử thất bại, hệ thống phải thông báo cho khách hàng và xử lý theo chính sách doanh nghiệp. |
+| **RULE-25** | Gửi thông báo | Hệ thống CAB, Nhà cung cấp thông báo | Các sự kiện quan trọng như tiếp nhận yêu cầu, nhận chuyến, thay đổi trạng thái và kết quả thanh toán phải được thông báo đến người liên quan. |
+| **RULE-26** | Đánh giá tài xế | Khách hàng | Khách hàng chỉ được đánh giá tài xế sau khi chuyến đi đã hoàn thành. |
+| **RULE-27** | Quản lý khách hàng | Nhân viên vận hành | Nhân viên vận hành được quản lý thông tin khách hàng theo quyền được cấp. |
+| **RULE-28** | Quản lý tài xế | Nhân viên vận hành | Nhân viên vận hành được quản lý thông tin tài xế theo quyền được cấp. |
+| **RULE-29** | Quản lý phương tiện | Nhân viên vận hành | Nhân viên vận hành được quản lý thông tin phương tiện và liên kết phương tiện với tài xế. |
+| **RULE-30** | Theo dõi chuyến vận hành | Nhân viên vận hành | Nhân viên vận hành được theo dõi các chuyến đang diễn ra và trạng thái của tài xế. |
+| **RULE-31** | Tra cứu lịch sử giao dịch | Nhân viên vận hành | Nhân viên vận hành được tra cứu lịch sử chuyến đi và giao dịch theo quyền được cấp. |
+| **RULE-32** | Xử lý sự cố chuyến đi | Nhân viên vận hành | Nhân viên vận hành được tiếp nhận và xử lý các trường hợp chuyến đi bị lỗi hoặc phát sinh sự cố. |
+| **RULE-33** | Xem báo cáo hoạt động | Ban lãnh đạo | Ban lãnh đạo được xem các báo cáo hoạt động phục vụ việc theo dõi và quản lý hệ thống. |
+| **RULE-34** | Bảo vệ dữ liệu | Hệ thống CAB | Thông tin cá nhân, dữ liệu vị trí và dữ liệu giao dịch phải được bảo vệ và chỉ được truy cập theo quyền được cấp. |
+| **RULE-35** | Lưu vết thao tác | Nhân viên vận hành, Ban lãnh đạo, Hệ thống CAB | Các thao tác quản trị quan trọng phải được hệ thống ghi nhận để phục vụ kiểm tra và quản lý. |
 | **RULE-21** | Lưu vết thao tác | Nhân viên vận hành, Ban lãnh đạo | Các thao tác quản trị quan trọng phải được hệ thống lưu vết để phục vụ kiểm tra. |
