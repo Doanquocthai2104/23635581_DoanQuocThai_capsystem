@@ -1,6 +1,4 @@
-# 23635581_DoanQuocThai_capsystem
-hoc thuc hanh buoi 1
-
+**Dự án xây dựng hệ thống CAB System – Nền tảng đặt xe**
 ## Các yếu điểm và hạn chế của hệ thống hiện tại
 
 | STT | Yếu điểm / hạn chế | Vấn đề cụ thể |
@@ -75,7 +73,7 @@ quadrantChart
     "Nhà cung cấp thông báo": [0.45, 0.25]
     "Nhà cung cấp bản đồ/vị trí": [0.50, 0.30]
 ```
-# Phạm vi cốt lõi trong 7 tuần
+##  Phạm vi cốt lõi trong 7 tuần
 
 | Vấn đề cốt lõi | Nội dung cần giải quyết |
 |---|---|
