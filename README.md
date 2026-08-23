@@ -834,3 +834,174 @@ flowchart LR
 | **Luồng sự kiện ngoại lệ (Exception flow)** | |
 | 5.1. Gửi thông báo thất bại. | 5.2. Ghi nhận lỗi và xử lý lại theo chính sách. |
 | 4.1. Nhà cung cấp không phản hồi. | 4.2. Ghi nhận lỗi nhưng không làm gián đoạn chức năng đặt xe. |
+
+
+## Business Process – CAB System
+
+```mermaid
+flowchart TD
+
+    %% =========================
+    %% 1. ĐẶT XE
+    %% =========================
+
+    subgraph BP1["1. ĐẶT XE"]
+        A([Bắt đầu]) --> B[Khách hàng đăng nhập]
+        B --> C[Nhập điểm đón và điểm đến]
+        C --> D[Chọn loại xe]
+        D --> E[Gửi yêu cầu đặt xe]
+
+        E --> F{Thông tin hợp lệ?}
+
+        F -- Không --> G[Thông báo thông tin không hợp lệ]
+        G --> C
+
+        F -- Có --> H[Tạo yêu cầu chuyến đi]
+        H --> I[Lưu thông tin chuyến]
+        I --> J[Thông báo yêu cầu đã được tiếp nhận]
+    end
+
+
+    %% =========================
+    %% 2. TÌM TÀI XẾ
+    %% =========================
+
+    subgraph BP2["2. TÌM VÀ PHÂN CÔNG TÀI XẾ"]
+        K[Tìm tài xế phù hợp]
+        K --> L[Xác định tài xế sẵn sàng]
+        L --> M[Kiểm tra vị trí và tiêu chí phù hợp]
+        M --> N[Ưu tiên tài xế phù hợp và gần khách hàng]
+        N --> O[Gửi yêu cầu chuyến cho tài xế]
+
+        O --> P{Tài xế phản hồi?}
+
+        P -- Từ chối --> Q[Ghi nhận tài xế từ chối]
+        Q --> K
+
+        P -- Không phản hồi --> R[Ghi nhận không phản hồi]
+        R --> K
+
+        P -- Chấp nhận --> S[Gán tài xế cho chuyến]
+        S --> T[Thông báo tài xế đã nhận chuyến cho khách hàng]
+    end
+
+
+    %% =========================
+    %% 3. THỰC HIỆN CHUYẾN
+    %% =========================
+
+    subgraph BP3["3. THỰC HIỆN CHUYẾN"]
+        U[Tài xế di chuyển đến điểm đón]
+        U --> V[Cập nhật: Đã đến điểm đón]
+        V --> W[Thông báo cho khách hàng]
+
+        W --> X[Tài xế đón khách]
+        X --> Y[Cập nhật: Đã đón khách]
+        Y --> Z[Thông báo trạng thái chuyến]
+
+        Z --> AA[Tài xế di chuyển đến điểm đến]
+        AA --> AB[Cập nhật: Đang di chuyển]
+        AB --> AC[Khách hàng theo dõi chuyến đi]
+
+        AC --> AD[Đến điểm đến]
+        AD --> AE[Cập nhật: Hoàn thành chuyến]
+        AE --> AF[Lưu thông tin chuyến hoàn thành]
+    end
+
+
+    %% =========================
+    %% 4. TÍNH CƯỚC
+    %% =========================
+
+    subgraph BP4["4. TÍNH CƯỚC"]
+        AG[Tính cước chuyến đi]
+        AG --> AH[Xác định số tiền khách hàng phải trả]
+        AH --> AI[Thông báo số tiền phải trả]
+    end
+
+
+    %% =========================
+    %% 5. THANH TOÁN
+    %% =========================
+
+    subgraph BP5["5. THANH TOÁN"]
+        AJ{Phương thức thanh toán?}
+
+        AJ -- Tiền mặt --> AK[Ghi nhận thanh toán tiền mặt]
+        AK --> AL[Cập nhật trạng thái giao dịch]
+
+        AJ -- Điện tử --> AM[Gửi yêu cầu đến nhà cung cấp thanh toán]
+        AM --> AN[Xử lý giao dịch]
+        AN --> AO{Thanh toán thành công?}
+
+        AO -- Có --> AP[Ghi nhận giao dịch thành công]
+        AP --> AL
+
+        AO -- Không --> AQ[Ghi nhận giao dịch thất bại]
+        AQ --> AR[Thông báo thanh toán thất bại]
+        AR --> AS{Xử lý lại?}
+
+        AS -- Có --> AM
+        AS -- Không --> AT[Chờ xử lý theo chính sách doanh nghiệp]
+
+        AL --> AU[Thông báo kết quả thanh toán]
+    end
+
+
+    %% =========================
+    %% 6. ĐÁNH GIÁ
+    %% =========================
+
+    subgraph BP6["6. ĐÁNH GIÁ TÀI XẾ"]
+        AV[Khách hàng đánh giá tài xế]
+        AV --> AW[Nhập mức đánh giá]
+        AW --> AX{Đánh giá hợp lệ?}
+
+        AX -- Không --> AY[Thông báo đánh giá không hợp lệ]
+        AY --> AW
+
+        AX -- Có --> AZ[Lưu đánh giá]
+        AZ --> BA([Kết thúc])
+    end
+
+
+    %% =========================
+    %% 7. THÔNG BÁO
+    %% =========================
+
+    subgraph BP7["7. THÔNG BÁO"]
+        N1[Thông báo yêu cầu được tiếp nhận]
+        N2[Thông báo tài xế nhận chuyến]
+        N3[Thông báo tài xế đến điểm đón]
+        N4[Thông báo trạng thái chuyến]
+        N5[Thông báo chuyến hoàn thành]
+        N6[Thông báo kết quả thanh toán]
+
+        N1 --> N7[Nhà cung cấp thông báo]
+        N2 --> N7
+        N3 --> N7
+        N4 --> N7
+        N5 --> N7
+        N6 --> N7
+    end
+
+
+    %% =========================
+    %% LIÊN KẾT GIỮA CÁC NHÓM
+    %% =========================
+
+    J --> K
+    T --> U
+    AF --> AG
+    AI --> AJ
+    AU --> AV
+
+    %% Liên kết thông báo
+    J -.-> N1
+    T -.-> N2
+    W -.-> N3
+    Z -.-> N4
+    AE -.-> N5
+    AU -.-> N6
+```
+
