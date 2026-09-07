@@ -1,0 +1,75 @@
+openapi: 3.0.3
+info:
+  title: CAB System - FR-08.2 / API-28
+  description: 'FR-08.2 - Get role permissions. API: API-28. Business Requirement:
+    BR-08: Bảo mật & dữ liệu.'
+  version: 1.0.0
+servers:
+- url: https://api.cabsystem.example.com
+  description: Production Server
+- url: http://localhost:8080
+  description: Local Development Server
+tags:
+- name: 'BR-08: Bảo mật & dữ liệu'
+  description: Các API phục vụ xác thực, phân quyền, bảo vệ dữ liệu và audit log.
+paths:
+  /api/v1/auth/permissions:
+    get:
+      tags:
+      - 'BR-08: Bảo mật & dữ liệu'
+      summary: Get role permissions
+      description: Returns permissions associated with a specified role.
+      operationId: getRolePermissions
+      security:
+      - bearerAuth: []
+      parameters:
+      - name: role
+        in: query
+        required: true
+        schema:
+          type: string
+          enum:
+          - CUSTOMER
+          - DRIVER
+          - OPERATION
+          - MANAGEMENT
+        example: DRIVER
+      responses:
+        '200':
+          description: Permissions returned
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: Operation successful
+                  data:
+                    type: object
+                    additionalProperties: true
+        '403':
+          description: Access denied
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  errorCode:
+                    type: string
+                    example: INVALID_REQUEST
+                  message:
+                    type: string
+                    example: Invalid request data
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT

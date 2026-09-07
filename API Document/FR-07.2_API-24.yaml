@@ -1,0 +1,76 @@
+openapi: 3.0.3
+info:
+  title: CAB System - FR-07.2 / API-24
+  description: 'FR-07.2 - Monitor ongoing trips. API: API-24. Business Requirement:
+    BR-07: Quản lý vận hành.'
+  version: 1.0.0
+servers:
+- url: https://api.cabsystem.example.com
+  description: Production Server
+- url: http://localhost:8080
+  description: Local Development Server
+tags:
+- name: 'BR-07: Quản lý vận hành'
+  description: Các API hỗ trợ nhân viên quản lý và giám sát vận hành.
+paths:
+  /api/v1/operations/trips:
+    get:
+      tags:
+      - 'BR-07: Quản lý vận hành'
+      summary: Monitor ongoing trips
+      description: Returns ongoing trips and driver status for operation staff.
+      operationId: monitorOperationalTrips
+      security:
+      - bearerAuth: []
+      parameters:
+      - name: status
+        in: query
+        required: false
+        schema:
+          type: string
+        example: IN_PROGRESS
+      - name: driverStatus
+        in: query
+        required: false
+        schema:
+          type: string
+        example: AVAILABLE
+      responses:
+        '200':
+          description: Operational trips returned
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: Operation successful
+                  data:
+                    type: object
+                    additionalProperties: true
+        '403':
+          description: Insufficient permissions
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  errorCode:
+                    type: string
+                    example: INVALID_REQUEST
+                  message:
+                    type: string
+                    example: Invalid request data
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT

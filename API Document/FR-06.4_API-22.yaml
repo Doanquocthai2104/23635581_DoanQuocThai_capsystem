@@ -1,0 +1,87 @@
+openapi: 3.0.3
+info:
+  title: CAB System - FR-06.4 / API-22
+  description: 'FR-06.4 - Notify driver about trip. API: API-22. Business Requirement:
+    BR-06: Thông báo.'
+  version: 1.0.0
+servers:
+- url: https://api.cabsystem.example.com
+  description: Production Server
+- url: http://localhost:8080
+  description: Local Development Server
+tags:
+- name: 'BR-06: Thông báo'
+  description: Các API gửi thông báo cho khách hàng và tài xế.
+paths:
+  /api/v1/notifications/driver:
+    post:
+      tags:
+      - 'BR-06: Thông báo'
+      summary: Notify driver about trip
+      description: Sends a new trip request or trip change notification to a driver.
+      operationId: notifyDriver
+      security:
+      - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+              - driverId
+              - tripId
+              - type
+              - message
+              properties:
+                driverId:
+                  type: string
+                  example: DR001
+                tripId:
+                  type: string
+                  example: TR001
+                type:
+                  type: string
+                  example: NEW_TRIP
+                message:
+                  type: string
+                  example: You have a new trip request
+      responses:
+        '200':
+          description: Driver notification sent
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: Operation successful
+                  data:
+                    type: object
+                    additionalProperties: true
+        '400':
+          description: Invalid driver notification data
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  errorCode:
+                    type: string
+                    example: INVALID_REQUEST
+                  message:
+                    type: string
+                    example: Invalid request data
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT

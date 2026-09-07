@@ -1,0 +1,99 @@
+openapi: 3.0.3
+info:
+  title: CAB System - FR-07.4 / API-26
+  description: 'FR-07.4 - Handle trip incident. API: API-26. Business Requirement:
+    BR-07: Quản lý vận hành.'
+  version: 1.0.0
+servers:
+- url: https://api.cabsystem.example.com
+  description: Production Server
+- url: http://localhost:8080
+  description: Local Development Server
+tags:
+- name: 'BR-07: Quản lý vận hành'
+  description: Các API hỗ trợ nhân viên quản lý và giám sát vận hành.
+paths:
+  /api/v1/operations/incidents:
+    post:
+      tags:
+      - 'BR-07: Quản lý vận hành'
+      summary: Handle trip incident
+      description: Records and handles a failed trip or operational incident.
+      operationId: handleIncident
+      security:
+      - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+              - tripId
+              - incidentType
+              - description
+              properties:
+                tripId:
+                  type: string
+                  example: TR001
+                incidentType:
+                  type: string
+                  example: DRIVER_NO_SHOW
+                description:
+                  type: string
+                  example: Driver did not arrive at pickup location
+      responses:
+        '201':
+          description: Incident recorded
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: Operation successful
+                  data:
+                    type: object
+                    additionalProperties: true
+        '400':
+          description: Invalid incident data
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  errorCode:
+                    type: string
+                    example: INVALID_REQUEST
+                  message:
+                    type: string
+                    example: Invalid request data
+        '403':
+          description: Insufficient permissions
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  errorCode:
+                    type: string
+                    example: INVALID_REQUEST
+                  message:
+                    type: string
+                    example: Invalid request data
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT

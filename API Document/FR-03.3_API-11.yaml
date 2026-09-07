@@ -1,0 +1,81 @@
+openapi: 3.0.3
+info:
+  title: CAB System - FR-03.3 / API-11
+  description: 'FR-03.3 - Complete trip. API: API-11. Business Requirement: BR-03:
+    Thực hiện chuyến.'
+  version: 1.0.0
+servers:
+- url: https://api.cabsystem.example.com
+  description: Production Server
+- url: http://localhost:8080
+  description: Local Development Server
+tags:
+- name: 'BR-03: Thực hiện chuyến'
+  description: Các API phục vụ tài xế nhận và thực hiện chuyến.
+paths:
+  /api/v1/trips/{tripId}/complete:
+    put:
+      tags:
+      - 'BR-03: Thực hiện chuyến'
+      summary: Complete trip
+      description: Marks a trip as completed.
+      operationId: completeTrip
+      security:
+      - bearerAuth: []
+      parameters:
+      - name: tripId
+        in: path
+        required: true
+        schema:
+          type: string
+        example: TR001
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                completedAt:
+                  type: string
+                  format: date-time
+                  example: '2026-09-07T18:30:00Z'
+      responses:
+        '200':
+          description: Trip completed
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: Operation successful
+                  data:
+                    type: object
+                    additionalProperties: true
+        '404':
+          description: Trip not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  errorCode:
+                    type: string
+                    example: INVALID_REQUEST
+                  message:
+                    type: string
+                    example: Invalid request data
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT

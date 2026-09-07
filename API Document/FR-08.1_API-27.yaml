@@ -1,0 +1,67 @@
+openapi: 3.0.3
+info:
+  title: CAB System - FR-08.1 / API-27
+  description: 'FR-08.1 - Verify authentication token. API: API-27. Business Requirement:
+    BR-08: Bảo mật & dữ liệu.'
+  version: 1.0.0
+servers:
+- url: https://api.cabsystem.example.com
+  description: Production Server
+- url: http://localhost:8080
+  description: Local Development Server
+tags:
+- name: 'BR-08: Bảo mật & dữ liệu'
+  description: Các API phục vụ xác thực, phân quyền, bảo vệ dữ liệu và audit log.
+paths:
+  /api/v1/auth/verify:
+    post:
+      tags:
+      - 'BR-08: Bảo mật & dữ liệu'
+      summary: Verify authentication token
+      description: Verifies whether an authentication token is valid.
+      operationId: verifyAuthenticationToken
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+              - token
+              properties:
+                token:
+                  type: string
+                  example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9
+      responses:
+        '200':
+          description: Token is valid
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: Operation successful
+                  data:
+                    type: object
+                    additionalProperties: true
+        '401':
+          description: Token is invalid or expired
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  errorCode:
+                    type: string
+                    example: INVALID_REQUEST
+                  message:
+                    type: string
+                    example: Invalid request data

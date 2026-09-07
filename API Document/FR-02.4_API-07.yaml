@@ -1,0 +1,81 @@
+openapi: 3.0.3
+info:
+  title: CAB System - FR-02.4 / API-07
+  description: 'FR-02.4 - Find another driver. API: API-07. Business Requirement:
+    BR-02: Tìm tài xế.'
+  version: 1.0.0
+servers:
+- url: https://api.cabsystem.example.com
+  description: Production Server
+- url: http://localhost:8080
+  description: Local Development Server
+tags:
+- name: 'BR-02: Tìm tài xế'
+  description: Các API phục vụ tìm kiếm, lựa chọn và phân công tài xế.
+paths:
+  /api/v1/trips/{tripId}/find-driver:
+    post:
+      tags:
+      - 'BR-02: Tìm tài xế'
+      summary: Find another driver
+      description: Starts another driver search when the previous driver rejects the
+        trip or is unavailable.
+      operationId: findAnotherDriver
+      security:
+      - bearerAuth: []
+      parameters:
+      - name: tripId
+        in: path
+        required: true
+        schema:
+          type: string
+        example: TR001
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                reason:
+                  type: string
+                  example: DRIVER_REJECTED
+      responses:
+        '200':
+          description: Driver search started
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: Operation successful
+                  data:
+                    type: object
+                    additionalProperties: true
+        '404':
+          description: Trip not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  errorCode:
+                    type: string
+                    example: INVALID_REQUEST
+                  message:
+                    type: string
+                    example: Invalid request data
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT

@@ -1,0 +1,80 @@
+openapi: 3.0.3
+info:
+  title: CAB System - FR-06.1 / API-19
+  description: 'FR-06.1 - Notify booking result. API: API-19. Business Requirement:
+    BR-06: Thông báo.'
+  version: 1.0.0
+servers:
+- url: https://api.cabsystem.example.com
+  description: Production Server
+- url: http://localhost:8080
+  description: Local Development Server
+tags:
+- name: 'BR-06: Thông báo'
+  description: Các API gửi thông báo cho khách hàng và tài xế.
+paths:
+  /api/v1/notifications/booking:
+    post:
+      tags:
+      - 'BR-06: Thông báo'
+      summary: Notify booking result
+      description: Sends booking acceptance or booking result notification to the
+        customer.
+      operationId: notifyBookingResult
+      security:
+      - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+              - bookingId
+              - customerId
+              properties:
+                bookingId:
+                  type: string
+                  example: BK001
+                customerId:
+                  type: string
+                  example: CUS001
+      responses:
+        '200':
+          description: Booking notification sent
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: Operation successful
+                  data:
+                    type: object
+                    additionalProperties: true
+        '400':
+          description: Invalid booking notification data
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  errorCode:
+                    type: string
+                    example: INVALID_REQUEST
+                  message:
+                    type: string
+                    example: Invalid request data
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
