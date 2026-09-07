@@ -1,0 +1,70 @@
+openapi: 3.0.3
+info:
+  title: CAB System - FR-04.2 / API-13
+  description: 'FR-04.2 - Get assigned driver. API: API-13. Business Requirement:
+    BR-04: Theo dõi chuyến.'
+  version: 1.0.0
+servers:
+- url: https://api.cabsystem.example.com
+  description: Production Server
+- url: http://localhost:8080
+  description: Local Development Server
+tags:
+- name: 'BR-04: Theo dõi chuyến'
+  description: Các API phục vụ khách hàng theo dõi trạng thái và thông tin chuyến.
+paths:
+  /api/v1/trips/{tripId}/driver:
+    get:
+      tags:
+      - 'BR-04: Theo dõi chuyến'
+      summary: Get assigned driver
+      description: Returns the driver and vehicle information assigned to a trip.
+      operationId: getTripDriver
+      security:
+      - bearerAuth: []
+      parameters:
+      - name: tripId
+        in: path
+        required: true
+        schema:
+          type: string
+        example: TR001
+      responses:
+        '200':
+          description: Driver information returned
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: Operation successful
+                  data:
+                    type: object
+                    additionalProperties: true
+        '404':
+          description: Trip or driver not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  errorCode:
+                    type: string
+                    example: INVALID_REQUEST
+                  message:
+                    type: string
+                    example: Invalid request data
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
