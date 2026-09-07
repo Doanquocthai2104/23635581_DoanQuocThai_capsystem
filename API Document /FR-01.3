@@ -1,1 +1,76 @@
+openapi: 3.0.3
+info:
+  title: CAB System - FR-01.3 / API-03
+  description: 'FR-01.3 - Create trip. API: API-03. Business Requirement: BR-01: Đặt
+    xe.'
+  version: 1.0.0
+servers:
+- url: https://api.cabsystem.example.com
+  description: Production Server
+- url: http://localhost:8080
+  description: Local Development Server
+tags:
+- name: 'BR-01: Đặt xe'
+  description: Các API phục vụ chức năng đặt xe.
+paths:
+  /api/v1/trips:
+    post:
+      tags:
+      - 'BR-01: Đặt xe'
+      summary: Create trip
+      description: Creates a trip from an existing booking.
+      operationId: createTrip
+      security:
+      - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+              - bookingId
+              properties:
+                bookingId:
+                  type: string
+                  example: BK001
+      responses:
+        '201':
+          description: Trip created
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: Operation successful
+                  data:
+                    type: object
+                    additionalProperties: true
+        '404':
+          description: Booking not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  errorCode:
+                    type: string
+                    example: INVALID_REQUEST
+                  message:
+                    type: string
+                    example: Invalid request data
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
 
