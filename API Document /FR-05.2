@@ -1,0 +1,103 @@
+openapi: 3.0.3
+info:
+  title: CAB System - FR-05.2 / API-16
+  description: 'FR-05.2 - Process payment. API: API-16. Business Requirement: BR-05:
+    Tính cước & thanh toán.'
+  version: 1.0.0
+servers:
+- url: https://api.cabsystem.example.com
+  description: Production Server
+- url: http://localhost:8080
+  description: Local Development Server
+tags:
+- name: 'BR-05: Tính cước & thanh toán'
+  description: Các API phục vụ tính cước và xử lý thanh toán.
+paths:
+  /api/v1/payments:
+    post:
+      tags:
+      - 'BR-05: Tính cước & thanh toán'
+      summary: Process payment
+      description: Creates and processes a payment for a trip.
+      operationId: processPayment
+      security:
+      - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+              - tripId
+              - paymentMethod
+              - amount
+              properties:
+                tripId:
+                  type: string
+                  example: TR001
+                paymentMethod:
+                  type: string
+                  enum:
+                  - CASH
+                  - E_WALLET
+                  example: E_WALLET
+                amount:
+                  type: number
+                  format: double
+                  example: 85000
+      responses:
+        '201':
+          description: Payment processed
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: Operation successful
+                  data:
+                    type: object
+                    additionalProperties: true
+        '400':
+          description: Invalid payment data
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  errorCode:
+                    type: string
+                    example: INVALID_REQUEST
+                  message:
+                    type: string
+                    example: Invalid request data
+        '402':
+          description: Payment failed
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  errorCode:
+                    type: string
+                    example: INVALID_REQUEST
+                  message:
+                    type: string
+                    example: Invalid request data
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
