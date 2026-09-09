@@ -1,0 +1,60 @@
+openapi: 3.0.3
+info:
+  title: FR-09.2 Role-Based Access Control API
+  description: Lấy danh sách quyền hạn (Permissions) dựa trên vai trò (Role) của
+    người dùng hiện tại.
+  version: 1.0.0
+servers:
+  - url: https://api.taxiapp.com/api/v1
+paths:
+  /auth/permissions:
+    get:
+      summary: Kiểm soát quyền truy cập dựa trên vai trò (RBAC)
+      operationId: getUserPermissions
+      responses:
+        '200':
+          description: Lấy danh sách quyền thành công
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    example: 200
+                  data:
+                    type: object
+                    properties:
+                      role:
+                        type: string
+                        example: "ADMIN"
+                      permissions:
+                        type: array
+                        items:
+                          type: string
+                        example: ["customer:read", "customer:block", "trip:cancel",
+                          "report:export"]
+        '401':
+          description: Unauthenticated
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    example: 401
+                  error_code:
+                    type: string
+                    example: "UNAUTHORIZED"
+                  message:
+                    type: string
+                    example: "Token không hợp lệ hoặc đã hết hạn"
+      security:
+        - bearerAuth: []
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT

@@ -1,0 +1,105 @@
+openapi: 3.0.3
+info:
+  title: FR-02.2 Booking Requests API
+  description: Chọn loại xe và gửi yêu cầu đặt xe từ ứng dụng khách hàng.
+  version: 1.0.0
+servers:
+  - url: https://api.taxiapp.com/api/v1
+paths:
+  /bookings/requests:
+    post:
+      summary: Chọn loại xe và gửi yêu cầu đặt xe
+      operationId: createBookingRequest
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - vehicle_type
+                - estimated_fare
+                - pickup_location
+                - dropoff_location
+              properties:
+                vehicle_type:
+                  type: string
+                  enum: [BIKE, CAR_4_SEAT, CAR_7_SEAT]
+                  example: "CAR_4_SEAT"
+                estimated_fare:
+                  type: number
+                  example: 95000
+                payment_method:
+                  type: string
+                  example: "CASH"
+                pickup_location:
+                  type: object
+                  properties:
+                    address:
+                      type: string
+                      example: "268 Lý Thường Kiệt"
+                    lat:
+                      type: number
+                      example: 10.7721
+                    lng:
+                      type: number
+                      example: 106.6578
+                dropoff_location:
+                  type: object
+                  properties:
+                    address:
+                      type: string
+                      example: "Sân bay Tân Sơn Nhất"
+                    lat:
+                      type: number
+                      example: 10.8185
+                    lng:
+                      type: number
+                      example: 106.6588
+      responses:
+        '201':
+          description: Đã tạo yêu cầu thành công
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    example: 201
+                  data:
+                    type: object
+                    properties:
+                      booking_request_id:
+                        type: string
+                        example: "REQ-889012"
+                      status:
+                        type: string
+                        example: "PENDING"
+                      created_at:
+                        type: string
+                        example: "2026-09-09T08:35:00Z"
+        '400':
+          description: Loại xe hoặc cước phí không hợp lệ
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    example: 400
+                  error_code:
+                    type: string
+                    example: "INVALID_VEHICLE_TYPE"
+                  message:
+                    type: string
+                    example: "Loại xe được chọn không khả dụng"
+      security:
+        - bearerAuth: []
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT

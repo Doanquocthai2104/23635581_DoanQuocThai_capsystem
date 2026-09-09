@@ -1,0 +1,61 @@
+openapi: 3.0.3
+info:
+  title: FR-04.3 Trip Status Logs API
+  description: Ghi nhận và lưu giữ lịch sử biến động trạng thái chuyến đi theo 
+    thời gian thực.
+  version: 1.0.0
+servers:
+  - url: https://api.taxiapp.com/api/v1
+paths:
+  /trips/{tripId}/status-logs:
+    post:
+      summary: Ghi lịch sử trạng thái chuyến đi
+      operationId: logTripStatusChange
+      parameters:
+        - in: path
+          name: tripId
+          required: true
+          schema:
+            type: string
+            example: "TRIP-9901"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - status
+                - triggered_by
+              properties:
+                status:
+                  type: string
+                  example: "IN_PROGRESS"
+                triggered_by:
+                  type: string
+                  example: "DRIVER"
+                note:
+                  type: string
+                  example: "Khách đã lên xe"
+      responses:
+        '201':
+          description: Ghi log thành công
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    example: 201
+                  message:
+                    type: string
+                    example: "Đã ghi nhận log trạng thái thành công"
+      security:
+        - bearerAuth: []
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT

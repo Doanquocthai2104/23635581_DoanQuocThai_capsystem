@@ -1,0 +1,64 @@
+openapi: 3.0.3
+info:
+  title: FR-03.4 Reassign Driver API
+  description: Tự động chuyển tìm tài xế khác khi tài xế trước từ chối/hết giờ.
+  version: 1.0.0
+servers:
+  - url: https://api.taxiapp.com/api/v1
+paths:
+  /trips/{tripId}/reassign:
+    post:
+      summary: Chuyển tìm tài xế khác
+      operationId: reassignDriver
+      parameters:
+        - in: path
+          name: tripId
+          required: true
+          schema:
+            type: string
+            example: "TRIP-9901"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - previous_driver_id
+                - reason
+              properties:
+                previous_driver_id:
+                  type: string
+                  example: "DRV-501"
+                reason:
+                  type: string
+                  enum: [REJECTED, TIMEOUT]
+                  example: "TIMEOUT"
+      responses:
+        '200':
+          description: Đã chuyển sang tìm tài xế tiếp theo thành công
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    example: 200
+                  data:
+                    type: object
+                    properties:
+                      new_driver_id:
+                        type: string
+                        example: "DRV-502"
+                      attempt_count:
+                        type: integer
+                        example: 2
+      security:
+        - bearerAuth: []
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT

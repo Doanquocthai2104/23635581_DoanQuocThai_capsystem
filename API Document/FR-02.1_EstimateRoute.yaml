@@ -1,0 +1,93 @@
+openapi: 3.0.3
+info:
+  title: FR-02.1 Estimate Route API
+  description: Nhập và ước tính tuyến đường, khoảng cách và thời gian dự kiến.
+  version: 1.0.0
+servers:
+  - url: https://api.taxiapp.com/api/v1
+paths:
+  /bookings/estimate-route:
+    post:
+      summary: Nhập và xác định điểm đón, điểm đến
+      operationId: estimateRoute
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - pickup_location
+                - dropoff_location
+              properties:
+                pickup_location:
+                  type: object
+                  properties:
+                    address:
+                      type: string
+                      example: "268 Lý Thường Kiệt, Q.10, TP.HCM"
+                    latitude:
+                      type: number
+                      example: 10.7721
+                    longitude:
+                      type: number
+                      example: 106.6578
+                dropoff_location:
+                  type: object
+                  properties:
+                    address:
+                      type: string
+                      example: "Sân bay Tân Sơn Nhất, Q.Tân Bình, TP.HCM"
+                    latitude:
+                      type: number
+                      example: 10.8185
+                    longitude:
+                      type: number
+                      example: 106.6588
+      responses:
+        '200':
+          description: Ước tính tuyến đường thành công
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    example: 200
+                  data:
+                    type: object
+                    properties:
+                      distance_km:
+                        type: number
+                        example: 7.2
+                      duration_minutes:
+                        type: integer
+                        example: 22
+                      polyline:
+                        type: string
+                        example: "a~l~Fcy}sO..."
+        '400':
+          description: Địa điểm không hợp lệ
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    example: 400
+                  error_code:
+                    type: string
+                    example: "OUT_OF_SERVICE_AREA"
+                  message:
+                    type: string
+                    example: "Vị trí nằm ngoài vùng phục vụ"
+      security:
+        - bearerAuth: []
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT

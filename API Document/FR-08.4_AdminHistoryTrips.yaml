@@ -1,0 +1,58 @@
+openapi: 3.0.3
+info:
+  title: FR-08.4 Admin History Trips and Transactions API
+  description: Tra cứu lịch sử toàn bộ chuyến đi và giao dịch trong hệ thống.
+  version: 1.0.0
+servers:
+  - url: https://api.taxiapp.com/api/v1
+paths:
+  /admin/history/trips-and-transactions:
+    get:
+      summary: Tra cứu lịch sử chuyến đi & giao dịch
+      operationId: adminGetHistory
+      parameters:
+        - in: query
+          name: start_date
+          required: false
+          schema:
+            type: string
+            example: "2026-09-01"
+        - in: query
+          name: end_date
+          required: false
+          schema:
+            type: string
+            example: "2026-09-09"
+      responses:
+        '200':
+          description: Tra cứu thành công
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    example: 200
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        trip_id:
+                          type: string
+                          example: "TRIP-9901"
+                        total_fare:
+                          type: number
+                          example: 69000
+                        payment_status:
+                          type: string
+                          example: "PAID"
+      security:
+        - bearerAuth: []
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT

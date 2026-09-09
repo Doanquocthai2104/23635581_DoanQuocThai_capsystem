@@ -1,0 +1,67 @@
+openapi: 3.0.3
+info:
+  title: FR-03.3 Driver Response API
+  description: Ghi nhận phản hồi Chấp nhận / Từ chối chuyến của tài xế.
+  version: 1.0.0
+servers:
+  - url: https://api.taxiapp.com/api/v1
+paths:
+  /trips/{tripId}/driver-response:
+    post:
+      summary: Ghi nhận phản hồi tài xế
+      operationId: processDriverResponse
+      parameters:
+        - in: path
+          name: tripId
+          required: true
+          schema:
+            type: string
+            example: "TRIP-9901"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - driver_id
+                - action
+              properties:
+                driver_id:
+                  type: string
+                  example: "DRV-501"
+                action:
+                  type: string
+                  enum: [ACCEPT, REJECT]
+                  example: "ACCEPT"
+                reason:
+                  type: string
+                  example: "Quá xa điểm đón"
+      responses:
+        '200':
+          description: Xử lý thành công
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    example: 200
+                  message:
+                    type: string
+                    example: "Đã ghi nhận phản hồi thành công"
+                  data:
+                    type: object
+                    properties:
+                      trip_status:
+                        type: string
+                        example: "DRIVER_ACCEPTED"
+      security:
+        - bearerAuth: []
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT

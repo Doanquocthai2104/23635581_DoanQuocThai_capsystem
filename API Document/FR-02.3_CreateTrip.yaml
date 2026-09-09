@@ -1,0 +1,74 @@
+openapi: 3.0.3
+info:
+  title: FR-02.3 Create Trip API
+  description: Khởi tạo chuyến đi chính thức trong CSDL từ booking request.
+  version: 1.0.0
+servers:
+  - url: https://api.taxiapp.com/api/v1
+paths:
+  /trips:
+    post:
+      summary: Khởi tạo chuyến đi mới
+      operationId: createTrip
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - booking_request_id
+              properties:
+                booking_request_id:
+                  type: string
+                  example: "REQ-889012"
+      responses:
+        '201':
+          description: Khởi tạo chuyến đi thành công
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    example: 201
+                  data:
+                    type: object
+                    properties:
+                      trip_id:
+                        type: string
+                        example: "TRIP-9901"
+                      status:
+                        type: string
+                        example: "SEARCHING_DRIVER"
+                      customer_id:
+                        type: string
+                        example: "CUST-10023"
+                      created_at:
+                        type: string
+                        example: "2026-09-09T08:35:02Z"
+        '404':
+          description: Booking request không tìm thấy
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    example: 404
+                  error_code:
+                    type: string
+                    example: "BOOKING_REQUEST_NOT_FOUND"
+                  message:
+                    type: string
+                    example: "Yêu cầu đặt xe không tồn tại"
+      security:
+        - bearerAuth: []
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
