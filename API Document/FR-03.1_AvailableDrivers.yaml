@@ -1,0 +1,74 @@
+openapi: 3.0.3
+info:
+  title: FR-03.1 Find Available Drivers API
+  description: Tìm danh sách tài xế đang sẵn sàng xung quanh vị trí khách hàng.
+  version: 1.0.0
+servers:
+  - url: https://api.taxiapp.com/api/v1
+paths:
+  /drivers/available:
+    get:
+      summary: Tìm tài xế sẵn sàng xung quanh
+      operationId: getAvailableDrivers
+      parameters:
+        - in: query
+          name: latitude
+          required: true
+          schema:
+            type: number
+            example: 10.7721
+        - in: query
+          name: longitude
+          required: true
+          schema:
+            type: number
+            example: 106.6578
+        - in: query
+          name: radius_km
+          required: false
+          schema:
+            type: number
+            default: 3.0
+            example: 3.0
+        - in: query
+          name: vehicle_type
+          required: false
+          schema:
+            type: string
+            example: "CAR_4_SEAT"
+      responses:
+        '200':
+          description: Thành công
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    example: 200
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        driver_id:
+                          type: string
+                          example: "DRV-501"
+                        latitude:
+                          type: number
+                          example: 10.7735
+                        longitude:
+                          type: number
+                          example: 106.6580
+                        bearing:
+                          type: number
+                          example: 180.5
+      security:
+        - bearerAuth: []
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT

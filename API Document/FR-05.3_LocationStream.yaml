@@ -1,0 +1,48 @@
+openapi: 3.0.3
+info:
+  title: FR-05.3 Location Stream SSE/WS Metadata API
+  description: Lấy endpoint & token thiết lập stream vị trí real-time của tài xế
+    (Server-Sent Events / WebSocket).
+  version: 1.0.0
+servers:
+  - url: https://api.taxiapp.com/api/v1
+paths:
+  /customers/trips/{tripId}/location-stream:
+    get:
+      summary: Truy xuất thông số stream vị trí real-time
+      operationId: getLocationStreamConfig
+      parameters:
+        - in: path
+          name: tripId
+          required: true
+          schema:
+            type: string
+            example: "TRIP-9901"
+      responses:
+        '200':
+          description: Kết nối stream hợp lệ
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    example: 200
+                  data:
+                    type: object
+                    properties:
+                      stream_url:
+                        type: string
+                        example: "wss://stream.taxiapp.com/trips/TRIP-9901/live"
+                      stream_token:
+                        type: string
+                        example: "st_9012831203"
+      security:
+        - bearerAuth: []
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT

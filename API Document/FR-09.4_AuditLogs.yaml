@@ -1,0 +1,70 @@
+openapi: 3.0.3
+info:
+  title: FR-09.4 Audit Logs API
+  description: Tự động ghi nhận và lưu trữ nhật ký hệ thống cho các thao tác 
+    quản trị quan trọng.
+  version: 1.0.0
+servers:
+  - url: https://api.taxiapp.com/api/v1
+paths:
+  /admin/audit-logs:
+    post:
+      summary: Ghi nhật ký thao tác quản trị (Audit Log)
+      operationId: createAuditLog
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - admin_id
+                - action
+                - target_resource
+              properties:
+                admin_id:
+                  type: string
+                  example: "ADM-001"
+                action:
+                  type: string
+                  example: "BLOCK_CUSTOMER"
+                target_resource:
+                  type: string
+                  example: "CUST-10023"
+                ip_address:
+                  type: string
+                  example: "14.241.120.45"
+                payload_snapshot:
+                  type: object
+                  example: {"reason": "Spam booking", "status": "BLOCKED"}
+      responses:
+        '201':
+          description: Lưu Audit Log thành công
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    example: 201
+                  message:
+                    type: string
+                    example: "Nhật ký quản trị đã được ghi nhận"
+                  data:
+                    type: object
+                    properties:
+                      log_id:
+                        type: string
+                        example: "LOG-99201"
+                      created_at:
+                        type: string
+                        example: "2026-09-09T09:35:00Z"
+      security:
+        - bearerAuth: []
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT

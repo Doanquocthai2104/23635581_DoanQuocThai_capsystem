@@ -1,0 +1,61 @@
+openapi: 3.0.3
+info:
+  title: FR-08.5 Admin Resolve Dispute API
+  description: Công cụ hỗ trợ Admin xử lý sự cố hoặc tranh chấp chuyến đi.
+  version: 1.0.0
+servers:
+  - url: https://api.taxiapp.com/api/v1
+paths:
+  /admin/disputes/{tripId}/resolve:
+    post:
+      summary: Xử lý sự cố/tranh chấp chuyến đi
+      operationId: adminResolveDispute
+      parameters:
+        - in: path
+          name: tripId
+          required: true
+          schema:
+            type: string
+            example: "TRIP-9901"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - resolution_action
+                - notes
+              properties:
+                resolution_action:
+                  type: string
+                  enum: [REFUND_CUSTOMER, COMPENSATE_DRIVER, CANCEL_TRIP]
+                  example: "REFUND_CUSTOMER"
+                refund_amount:
+                  type: number
+                  example: 69000
+                notes:
+                  type: string
+                  example: "Tài xế đi sai tuyến đường gây kéo dài thời gian"
+      responses:
+        '200':
+          description: Đã giải quyết tranh chấp
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    example: 200
+                  message:
+                    type: string
+                    example: "Đã hoàn tiền thành công cho khách hàng"
+      security:
+        - bearerAuth: []
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT

@@ -1,0 +1,65 @@
+openapi: 3.0.3
+info:
+  title: FR-05.2 Get Driver Info API
+  description: Hiển thị chi tiết thông tin tài xế và xe đang đón/chở khách.
+  version: 1.0.0
+servers:
+  - url: https://api.taxiapp.com/api/v1
+paths:
+  /customers/trips/{tripId}/driver-info:
+    get:
+      summary: Hiển thị thông tin tài xế và phương tiện
+      operationId: getTripDriverInfo
+      parameters:
+        - in: path
+          name: tripId
+          required: true
+          schema:
+            type: string
+            example: "TRIP-9901"
+      responses:
+        '200':
+          description: Lấy thành công
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    example: 200
+                  data:
+                    type: object
+                    properties:
+                      driver_name:
+                        type: string
+                        example: "Tran Van C"
+                      phone_number:
+                        type: string
+                        example: "+84912345678"
+                      avatar:
+                        type: string
+                        example: "https://storage.taxiapp.com/drivers/drv-501.jpg"
+                      rating:
+                        type: number
+                        example: 4.95
+                      vehicle:
+                        type: object
+                        properties:
+                          license_plate:
+                            type: string
+                            example: "51H-123.45"
+                          model:
+                            type: string
+                            example: "Toyota Vios 2022"
+                          color:
+                            type: string
+                            example: "Trắng"
+      security:
+        - bearerAuth: []
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT

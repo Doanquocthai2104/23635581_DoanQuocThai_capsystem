@@ -1,0 +1,49 @@
+openapi: 3.0.3
+info:
+  title: FR-08.3 Admin Active Trips API
+  description: Theo dõi danh sách các chuyến đi đang diễn ra theo thời gian 
+    thực.
+  version: 1.0.0
+servers:
+  - url: https://api.taxiapp.com/api/v1
+paths:
+  /admin/active-trips:
+    get:
+      summary: Theo dõi các chuyến đi đang diễn ra
+      operationId: adminGetActiveTrips
+      responses:
+        '200':
+          description: Thành công
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    example: 200
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        trip_id:
+                          type: string
+                          example: "TRIP-9901"
+                        driver_id:
+                          type: string
+                          example: "DRV-501"
+                        customer_id:
+                          type: string
+                          example: "CUST-10023"
+                        status:
+                          type: string
+                          example: "IN_PROGRESS"
+      security:
+        - bearerAuth: []
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT

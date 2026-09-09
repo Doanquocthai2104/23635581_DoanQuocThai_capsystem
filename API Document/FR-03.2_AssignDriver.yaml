@@ -1,0 +1,66 @@
+openapi: 3.0.3
+info:
+  title: FR-03.2 Assign Driver API
+  description: Thuật toán phân công tài xế tối ưu cho chuyến đi.
+  version: 1.0.0
+servers:
+  - url: https://api.taxiapp.com/api/v1
+paths:
+  /trips/{tripId}/assign-driver:
+    post:
+      summary: Phân công tài xế
+      operationId: assignDriverToTrip
+      parameters:
+        - in: path
+          name: tripId
+          required: true
+          schema:
+            type: string
+            example: "TRIP-9901"
+      responses:
+        '200':
+          description: Đã gán tài xế vào danh sách đề xuất thành công
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    example: 200
+                  data:
+                    type: object
+                    properties:
+                      trip_id:
+                        type: string
+                        example: "TRIP-9901"
+                      assigned_driver_id:
+                        type: string
+                        example: "DRV-501"
+                      timeout_seconds:
+                        type: integer
+                        example: 30
+        '404':
+          description: Không có tài xế phù hợp
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    example: 404
+                  error_code:
+                    type: string
+                    example: "NO_DRIVER_AVAILABLE"
+                  message:
+                    type: string
+                    example: "Không tìm thấy tài xế xung quanh"
+      security:
+        - bearerAuth: []
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT

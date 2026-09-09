@@ -1,0 +1,113 @@
+openapi: 3.0.3
+info:
+  title: FR-01.1 Customer Registration API
+  description: Đăng ký tài khoản khách hàng mới trong hệ thống.
+  version: 1.0.0
+servers:
+  - url: https://api.taxiapp.com/api/v1
+    description: Production Environment
+paths:
+  /auth/register:
+    post:
+      summary: Đăng ký tài khoản khách hàng mới
+      operationId: registerCustomer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - phone_number
+                - password
+                - full_name
+              properties:
+                phone_number:
+                  type: string
+                  example: "+84987654321"
+                password:
+                  type: string
+                  format: password
+                  example: "P@ssw0rd123"
+                full_name:
+                  type: string
+                  example: "Nguyen Van A"
+                email:
+                  type: string
+                  format: email
+                  example: "nguyenvana@example.com"
+      responses:
+        '201':
+          description: Đăng ký thành công
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    example: 201
+                  message:
+                    type: string
+                    example: "Đăng ký tài khoản thành công"
+                  data:
+                    type: object
+                    properties:
+                      customer_id:
+                        type: string
+                        example: "CUST-10023"
+                      phone_number:
+                        type: string
+                        example: "+84987654321"
+                      created_at:
+                        type: string
+                        format: date-time
+                        example: "2026-09-09T08:30:00Z"
+        '400':
+          description: Yêu cầu không hợp lệ (Dữ liệu đầu vào sai định dạng)
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    example: 400
+                  error_code:
+                    type: string
+                    example: "INVALID_INPUT"
+                  message:
+                    type: string
+                    example: "Số điện thoại không đúng định dạng"
+        '409':
+          description: Xung đột dữ liệu (Số điện thoại đã tồn tại)
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    example: 409
+                  error_code:
+                    type: string
+                    example: "PHONE_ALREADY_EXISTS"
+                  message:
+                    type: string
+                    example: "Số điện thoại đã được đăng ký"
+        '500':
+          description: Lỗi máy chủ
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    example: 500
+                  error_code:
+                    type: string
+                    example: "INTERNAL_SERVER_ERROR"
+                  message:
+                    type: string
+                    example: "Đã có lỗi xảy ra trên hệ thống"

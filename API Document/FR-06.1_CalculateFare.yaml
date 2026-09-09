@@ -1,0 +1,73 @@
+openapi: 3.0.3
+info:
+  title: FR-06.1 Calculate Fare API
+  description: Tự động tính cước chuyến đi dựa vào khoảng cách, thời gian và hệ 
+    số giá.
+  version: 1.0.0
+servers:
+  - url: https://api.taxiapp.com/api/v1
+paths:
+  /payments/calculate:
+    post:
+      summary: Tự động tính tổng tiền cước chuyến đi
+      operationId: calculateFare
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - distance_km
+                - duration_minutes
+                - vehicle_type
+              properties:
+                distance_km:
+                  type: number
+                  example: 7.2
+                duration_minutes:
+                  type: integer
+                  example: 22
+                vehicle_type:
+                  type: string
+                  example: "CAR_4_SEAT"
+                promo_code:
+                  type: string
+                  example: "HELLOSEPT"
+      responses:
+        '200':
+          description: Tính toán tiền cước thành công
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    example: 200
+                  data:
+                    type: object
+                    properties:
+                      base_fare:
+                        type: number
+                        example: 70000
+                      surge_multiplier:
+                        type: number
+                        example: 1.2
+                      discount_amount:
+                        type: number
+                        example: 15000
+                      total_fare:
+                        type: number
+                        example: 69000
+                      currency:
+                        type: string
+                        example: "VND"
+      security:
+        - bearerAuth: []
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
