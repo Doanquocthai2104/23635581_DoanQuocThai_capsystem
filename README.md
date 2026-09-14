@@ -122,6 +122,250 @@ quadrantChart
 | **BR-08: Quản lý vận hành** | • **FR-08.1:** Cho phép nhân viên vận hành tìm kiếm, tra cứu danh sách, xem chi tiết và quản lý trạng thái tài khoản khách hàng (Kích hoạt / Khóa tài khoản khi vi phạm).<br>• **FR-08.2:** Cho phép nhân viên vận hành quản lý thông tin tài xế và duyệt/quản lý phương tiện.<br>• **FR-08.3:** Cho phép nhân viên theo dõi các chuyến đi đang diễn ra và vị trí/trạng thái tài xế.<br>• **FR-08.4:** Cho phép nhân viên tra cứu lịch sử toàn bộ chuyến đi và lịch sử giao dịch.<br>• **FR-08.5:** Cung cấp công cụ hỗ trợ nhân viên can thiệp xử lý các chuyến bị sự cố hoặc tranh chấp. |
 | **BR-09: Bảo mật & dữ liệu** | • **FR-09.1:** Xác thực thông tin đăng nhập của người dùng trước khi cấp quyền truy cập chức năng.<br>• **FR-09.2:** Kiểm soát quyền hạn truy cập dựa trên vai trò (Role-based Access Control).<br>• **FR-09.3:** Bảo vệ an toàn dữ liệu cá nhân, thông tin vị trí và lịch sử giao dịch.<br>• **FR-09.4:** Tự động lưu nhật ký hệ thống (Audit Log) cho các thao tác quản trị quan trọng. |
 
+
+# Acceptance Criteria - AC
+
+---
+
+## BR-01: Quản lý khách hàng
+
+### FR-01.1: Cho phép khách hàng đăng ký tài khoản mới
+* **AC1 (Thành công):** 
+  * **Given** khách hàng chưa có tài khoản trên hệ thống
+  * **When** nhập đầy đủ thông tin hợp lệ (Họ tên, Email, SĐT, Mật khẩu) và nhấn "Đăng ký"
+  * **Then** hệ thống tạo tài khoản mới, gửi mã OTP xác thực và chuyển hướng đến trang nhập OTP.
+* **AC2 (Trùng lặp dữ liệu):** 
+  * **Given** Email hoặc SĐT đã tồn tại trên hệ thống
+  * **When** khách hàng nhấn "Đăng ký"
+  * **Then** hệ thống hiển thị thông báo lỗi *"Email/SĐT đã được sử dụng"*.
+
+### FR-01.2: Cho phép khách hàng đăng nhập và đăng xuất
+* **AC1 (Đăng nhập thành công):** 
+  * **Given** khách hàng đã có tài khoản hợp lệ
+  * **When** nhập đúng Tên đăng nhập/SĐT và Mật khẩu
+  * **Then** hệ thống cấp quyền truy cập (Token/Session) và chuyển hướng vào màn hình chính.
+* **AC2 (Đăng xuất):** 
+  * **Given** khách hàng đang trong trạng thái đăng nhập
+  * **When** chọn "Đăng xuất"
+  * **Then** hệ thống xóa phiên làm việc và quay về màn hình Đăng nhập.
+
+### FR-01.3: Cho phép khách hàng xem và cập nhật thông tin cá nhân
+* **AC1 (Xem thông tin):** 
+  * **Given** khách hàng đã đăng nhập thành công
+  * **When** truy cập vào trang cá nhân
+  * **Then** hệ thống hiển thị chính xác Họ tên, Email, SĐT và Ảnh đại diện hiện tại.
+* **AC2 (Cập nhật thành công):** 
+  * **Given** khách hàng chỉnh sửa Họ tên hoặc tải lên Ảnh đại diện hợp lệ (`< 5MB`, định dạng `PNG/JPG`)
+  * **When** nhấn "Lưu thay đổi"
+  * **Then** hệ thống cập nhật dữ liệu và hiển thị thông báo thành công.
+
+---
+
+## BR-02: Đặt xe
+
+### FR-02.1: Cho phép khách hàng nhập điểm đón và điểm đến
+* **AC1 (Gợi ý địa chỉ):** 
+  * **Given** khách hàng gõ từ khóa vào ô Điểm đón hoặc Điểm đến
+  * **When** chuỗi nhập từ 3 ký tự trở lên
+  * **Then** hệ thống hiển thị danh sách gợi ý địa điểm tương ứng từ bản đồ.
+* **AC2 (Tính toán lộ trình):** 
+  * **Given** khách hàng đã chọn xong Điểm đón và Điểm đến hợp lệ
+  * **Then** hệ thống hiển thị đường đi dự kiến và tổng khoảng cách (km) trên bản đồ.
+
+### FR-02.2: Cho phép khách hàng chọn loại xe và gửi yêu cầu đặt xe
+* **AC1 (Chọn loại xe & Xem giá):** 
+  * **Given** lộ trình đã được xác định
+  * **When** khách hàng chọn loại xe (*Xe 4 chỗ / Xe 7 chỗ / Xe máy*)
+  * **Then** hệ thống hiển thị mức giá ước tính tương ứng với từng loại xe.
+* **AC2 (Gửi yêu cầu):** 
+  * **Given** khách hàng đã chọn loại xe
+  * **When** nhấn "Đặt xe"
+  * **Then** nút đặt xe chuyển sang trạng thái chờ và gửi yêu cầu lên hệ thống.
+
+### FR-02.3: Ghi nhận yêu cầu và tạo chuyến đi trong hệ thống
+* **AC1 (Tạo chuyến):** 
+  * **Given** hệ thống nhận được yêu cầu đặt xe hợp lệ từ khách hàng
+  * **Then** hệ thống tạo một bản ghi chuyến đi mới với trạng thái `PENDING` và trả về `Booking ID`.
+
+---
+
+## BR-03: Tìm tài xế
+
+### FR-03.1: Xác định tài xế đang sẵn sàng và phù hợp gần vị trí khách hàng
+* **AC1 (Quét tài xế):** 
+  * **Given** chuyến đi có trạng thái `PENDING`
+  * **When** hệ thống tìm kiếm tài xế
+  * **Then** lọc ra danh sách tài xế đang ở trạng thái `ONLINE`, đúng loại xe yêu cầu và ở trong bán kính quy định (ví dụ: `< 3km`).
+
+### FR-03.2: Ưu tiên phân công tài xế dựa trên vị trí và tiêu chí vận hành
+* **AC1 (Sắp xếp ưu tiên):** 
+  * **Given** danh sách tài xế phù hợp
+  * **Then** hệ thống sắp xếp danh sách tài xế theo thứ tự: Khoảng cách gần nhất > Điểm đánh giá (Rating) cao nhất.
+
+### FR-03.3: Gửi yêu cầu chuyến và ghi nhận phản hồi của tài xế
+* **AC1 (Gửi yêu cầu):** 
+  * **Given** tài xế đứng đầu danh sách ưu tiên
+  * **Then** hệ thống phát thông báo chuyến mới đến ứng dụng của tài xế đó kèm thời gian đếm ngược (30 giây).
+* **AC2 (Tài xế đồng ý):** 
+  * **Given** tài xế nhấn "Nhận chuyến"
+  * **Then** hệ thống chuyển trạng thái chuyến đi sang `ACCEPTED` và gán `Driver ID` vào chuyến đi.
+
+### FR-03.4: Tự động chuyển tìm tài xế khác khi bị từ chối hoặc hết thời gian
+* **AC1 (Từ chối / Hết giờ):** 
+  * **Given** tài xế nhấn "Từ chối" hoặc hết 30 giây không phản hồi
+  * **Then** hệ thống tự động phát yêu cầu chuyến đi đó đến tài xế ưu tiên tiếp theo trong danh sách.
+
+### FR-03.5: Thông báo cho khách hàng khi không tìm thấy tài xế phù hợp
+* **AC1 (Hết tài xế):** 
+  * **Given** đã gửi yêu cầu cho toàn bộ tài xế phù hợp hoặc hết tổng thời gian tìm kiếm (ví dụ: 3 phút) mà không có ai nhận
+  * **Then** hệ thống đổi trạng thái chuyến sang `CANCELLED_NO_DRIVER` và hiển thị thông báo *"Hiện không có tài xế gần bạn, vui lòng thử lại sau"*.
+
+---
+
+## BR-04: Thực hiện chuyến
+
+### FR-04.1: Cho phép tài xế tiếp nhận chuyến xe
+* **AC1 (Xác nhận nhận chuyến):** 
+  * **Given** tài xế nhấn "Chấp nhận"
+  * **Then** màn hình ứng dụng tài xế chuyển sang chế độ điều hướng đến Điểm đón.
+
+### FR-04.2: Cho phép tài xế cập nhật các trạng thái chuyến đi
+* **AC1 (Chuyển trạng thái):** 
+  * **Given** tài xế đang thực hiện chuyến đi
+  * **When** tài xế thao tác nhấn lượt lượt các nút: `"Đã đến điểm đón"` $\rightarrow$ `"Đã đón khách"` $\rightarrow$ `"Hoàn thành"`
+  * **Then** hệ thống chuyển trạng thái chuyến đi theo đúng trình tự trên.
+
+### FR-04.3: Ghi nhận và lưu giữ trạng thái chuyến đi theo thời gian thực
+* **AC1 (Lưu nhật ký trạng thái):** 
+  * **Given** trạng thái chuyến đi thay đổi
+  * **Then** hệ thống lưu vết mốc thời gian (Timestamp) và tọa độ GPS tương ứng của từng thay đổi vào CSDL.
+
+---
+
+## BR-05: Theo dõi chuyến
+
+### FR-05.1: Hiển thị trạng thái hiện tại của chuyến cho khách hàng
+* **AC1 (Hiển thị trạng thái):** 
+  * **Given** chuyến đi đã có tài xế nhận
+  * **Then** ứng dụng khách hàng hiển thị rõ trạng thái chuyến đi hiện tại (*Tài xế đang đến / Đang di chuyển*).
+
+### FR-05.2: Hiển thị thông tin tài xế và phương tiện
+* **AC1 (Xem thông tin tài xế):** 
+  * **Given** chuyến đi ở trạng thái `ACCEPTED`
+  * **Then** giao diện khách hàng hiển thị: Họ tên tài xế, SĐT, Điểm đánh giá, Biển số xe, Hiệu xe và Màu xe.
+
+### FR-05.3: Cập nhật liên tục thay đổi trạng thái chuyến đi trên giao diện khách hàng
+* **AC1 (Cập nhật thời gian thực):** 
+  * **Given** tài xế di chuyển hoặc cập nhật trạng thái mới
+  * **Then** giao diện khách hàng tự động cập nhật vị trí xe trên bản đồ và trạng thái mới mà không cần thao tác tải lại trang (Độ trễ `< 3s`).
+
+---
+
+## BR-06: Tính cước & Thanh toán
+
+### FR-06.1: Tự động tính tổng tiền cước khách hàng phải trả khi hoàn thành chuyến
+* **AC1 (Tính giá cước):** 
+  * **Given** tài xế nhấn "Hoàn thành chuyến"
+  * **Then** hệ thống tính tổng tiền = *Giá mở cửa + (Quãng đường thực tế × Đơn giá/km) + Phụ phí* và hiển thị số tiền lên màn hình của cả khách hàng và tài xế.
+
+### FR-06.2: Hỗ trợ linh hoạt các hình thức thanh toán
+* **AC1 (Thanh toán tự động / Tiền mặt):** 
+  * **Given** chuyến đi hoàn tất
+  * **Then** hệ thống tự động trừ tiền qua Ví/Thẻ (nếu khách chọn online) hoặc hiển thị số tiền mặt tài xế cần thu (nếu chọn tiền mặt).
+
+### FR-06.3: Ghi nhận kết quả giao dịch thanh toán vào hệ thống
+* **AC1 (Lưu lịch sử giao dịch):** 
+  * **Given** giao dịch thanh toán hoàn tất
+  * **Then** hệ thống lưu bản ghi giao dịch gồm: Mã giao dịch, Số tiền, Phương thức thanh toán, Trạng thái (`SUCCESS`/`FAILED`).
+
+### FR-06.4: Thông báo hóa đơn và kết quả thanh toán cho khách hàng
+* **AC1 (Xuất hóa đơn):** 
+  * **Given** thanh toán thành công
+  * **Then** hệ thống hiển thị hóa đơn chi tiết trên app và gửi sao kê chuyến đi qua Email đăng ký của khách hàng.
+
+---
+
+## BR-07: Thông báo
+
+### FR-07.1: Gửi thông báo xác nhận khi yêu cầu đặt xe được hệ thống tiếp nhận
+* **AC1 (Push notification):** 
+  * **Given** khách hàng vừa bấm "Đặt xe"
+  * **Then** hệ thống gửi thông báo đẩy (*Push Notification*): *"Hệ thống đang tìm tài xế cho bạn"*.
+
+### FR-07.2: Gửi thông báo khi có tài xế nhận chuyến và các thay đổi trạng thái
+* **AC1 (Thông báo chuyển trạng thái):** 
+  * **Given** chuyến đi đổi sang trạng thái mới (*Đã có tài xế nhận / Tài xế đã tới*)
+  * **Then** gửi thông báo đẩy tức thì đến ứng dụng khách hàng.
+
+### FR-07.3: Gửi thông báo kết quả giao dịch thanh toán
+* **AC1 (Thông báo thanh toán):** 
+  * **Given** thanh toán thành công
+  * **Then** hệ thống gửi thông báo: *"Thanh toán thành công [Số tiền] VNĐ cho chuyến đi [Mã chuyến]"*.
+
+### FR-07.4: Gửi thông báo phát chuyến mới hoặc các thay đổi cho tài xế
+* **AC1 (Cảnh báo tài xế):** 
+  * **Given** tài xế được hệ thống phát chuyến mới hoặc chuyến đi bị hủy
+  * **Then** ứng dụng phát âm thanh cảnh báo và hiển thị thông báo nổi lên màn hình tài xế.
+
+---
+
+## BR-08: Quản lý vận hành (Admin CMS)
+
+### FR-08.1: Tìm kiếm, tra cứu và quản lý trạng thái tài khoản khách hàng
+* **AC1 (Khóa tài khoản):** 
+  * **Given** nhân viên vận hành tra cứu tài khoản khách hàng trên CMS
+  * **When** nhấn nút "Khóa tài khoản"
+  * **Then** trạng thái tài khoản chuyển sang `BLOCKED` và tài khoản bị vô hiệu hóa phiên đăng nhập ngay lập tức.
+
+### FR-08.2: Quản lý thông tin tài xế và duyệt/quản lý phương tiện
+* **AC1 (Duyệt hồ sơ):** 
+  * **Given** tài xế mới tải lên đầy đủ giấy tờ và thông tin xe
+  * **When** nhân viên vận hành nhấn "Duyệt hồ sơ"
+  * **Then** trạng thái tài xế chuyển sang `APPROVED` và cho phép tài xế chuyển sang chế độ `ONLINE`.
+
+### FR-08.3: Theo dõi các chuyến đi đang diễn ra và vị trí/trạng thái tài xế
+* **AC1 (Giám sát Real-time):** 
+  * **Given** nhân viên truy cập màn hình giám sát trên CMS
+  * **Then** hệ thống hiển thị danh sách tất cả các chuyến đi `IN_PROGRESS` và vị trí thực tế của các tài xế `ONLINE` trên bản đồ.
+
+### FR-08.4: Tra cứu lịch sử toàn bộ chuyến đi và lịch sử giao dịch
+* **AC1 (Lọc & Xuất dữ liệu):** 
+  * **Given** nhân viên chọn khoảng thời gian (Từ ngày - Đến ngày)
+  * **When** nhấn "Tìm kiếm"
+  * **Then** CMS xuất danh sách toàn bộ chuyến đi và lịch sử giao dịch phát sinh trong khoảng thời gian đó.
+
+### FR-08.5: Cung cấp công cụ hỗ trợ nhân viên can thiệp xử lý sự cố/tranh chấp
+* **AC1 (Can thiệp chuyến đi):** 
+  * **Given** chuyến đi phát sinh sự cố
+  * **When** nhân viên chọn "Hủy chuyến cưỡng chế" hoặc "Điều chỉnh giá cước"
+  * **Then** hệ thống ghi nhận điều chỉnh, cập nhật trạng thái mới và yêu cầu nhân viên nhập lý do xử lý.
+
+---
+
+## BR-09: Bảo mật & Dữ liệu
+
+### FR-09.1: Xác thực thông tin đăng nhập của người dùng trước khi cấp quyền
+* **AC1 (Xác thực Token):** 
+  * **Given** yêu cầu gửi đến API bảo mật
+  * **When** request không chứa `Access Token` hoặc Token không hợp lệ/hết hạn
+  * **Then** hệ thống trả về mã lỗi `401 Unauthorized`.
+
+### FR-09.2: Kiểm soát quyền hạn truy cập dựa trên vai trò (RBAC)
+* **AC1 (Chặn truy cập trái phép):** 
+  * **Given** người dùng đăng nhập với vai trò `DRIVER` hoặc `CUSTOMER`
+  * **When** cố gắng truy cập vào API/Đường dẫn dành riêng cho Admin
+  * **Then** hệ thống từ chối truy cập và trả về mã lỗi `403 Forbidden`.
+
+### FR-09.3: Bảo vệ an toàn dữ liệu cá nhân, thông tin vị trí và lịch sử giao dịch
+* **AC1 (Mã hóa dữ liệu nhạy cảm):** 
+  * **Given** thông tin mật khẩu và thông tin giao dịch của người dùng
+  * **Then** hệ thống bắt buộc mã hóa (VD: `Bcrypt` cho Password, chuẩn `AES-256` cho dữ liệu nhạy cảm) trước khi lưu vào CSDL.
+
+### FR-09.4: Tự động lưu nhật ký hệ thống (Audit Log) cho các thao tác quản trị
+* **AC1 (Ghi Log quản trị):** 
+  * **Given** nhân viên thực hiện các thao tác quản trị (Khóa tài khoản, Duyệt xe, Sửa cước)
+  * **Then** hệ thống tự động ghi nhật ký (*Audit Log*) gồm: `Admin_ID`, `Hành động`, `Thời gian`, `IP Address` và `Dữ liệu thay đổi`.
+
 # Danh sách Use Case CAB System
 
 ## 1. Khách hàng
