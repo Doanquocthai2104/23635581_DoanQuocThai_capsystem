@@ -380,6 +380,7 @@ quadrantChart
 | **UC06** | Xem lịch sử chuyến đi |
 | **UC07** | Thanh toán chuyến đi |
 | **UC08** | Đánh giá tài xế |
+| **UC22** | Đăng xuất |
 
 
 ## 2. Tài xế
@@ -391,7 +392,7 @@ quadrantChart
 | **UC10** | Quản lý trạng thái hoạt động và vị trí |
 | **UC11** | Chấp nhận / Từ chối chuyến |
 | **UC12** | Cập nhật trạng thái chuyến |
-
+| **UC22** | Đăng xuất |
 
 
 ## 3. Nhân viên vận hành
@@ -405,7 +406,7 @@ quadrantChart
 | **UC16** | Theo dõi chuyến đi |
 | **UC17** | Tra cứu lịch sử giao dịch |
 | **UC18** | Xử lý sự cố chuyến đi |
-
+| **UC22** | Đăng xuất |
 
 ## 4. Ban lãnh đạo
 
@@ -421,7 +422,7 @@ quadrantChart
 |---|---|---|
 | **UC20** | Xử lý thanh toán điện tử | Nhà cung cấp thanh toán |
 | **UC21** | Gửi thông báo | Nhà cung cấp thông báo |
-
+| **UC22** | Đăng xuất |
 
 ##  Tổng hợp
 
@@ -432,11 +433,11 @@ quadrantChart
 | Nhân viên vận hành | 7 *(bao gồm UC02 dùng chung)* |
 | Ban lãnh đạo | 2 *(bao gồm UC02 dùng chung)* |
 | Hệ thống bên ngoài | 2 |
-| **Tổng số Use Case thực tế** | **21** |
+| **Tổng số Use Case thực tế** | **22** |
 
 ### Các Use Case dùng chung
 
-- **UC02 – Đăng nhập:** Khách hàng, Tài xế, Nhân viên vận hành, Ban lãnh đạo.
+- **UC02 – Đăng nhập , UC22 – Đăng xuất:** Khách hàng, Tài xế, Nhân viên vận hành, Ban lãnh đạo.
 - **UC20 – Xử lý thanh toán điện tử:** được sử dụng khi khách hàng thanh toán bằng phương thức điện tử.
 - **UC21 – Gửi thông báo:** phục vụ thông báo cho khách hàng, tài xế và các sự kiện quan trọng của hệ thống.
 ## Use Case Diagram – CAB System
@@ -470,6 +471,7 @@ flowchart LR
         UC06(["UC06 - Xem lịch sử chuyến đi"])
         UC07(["UC07 - Thanh toán chuyến đi"])
         UC08(["UC08 - Đánh giá tài xế"])
+        UC22(["UC22 - Đăng xuất"])
 
         %% ===== DRIVER =====
         UC09(["UC09 - Quản lý thông tin tài xế và phương tiện"])
@@ -506,6 +508,7 @@ flowchart LR
     Customer --- UC06
     Customer --- UC07
     Customer --- UC08
+    Customer --- UC22
 
     %% =========================
     %% DRIVER ASSOCIATIONS
@@ -516,6 +519,7 @@ flowchart LR
     Driver --- UC10
     Driver --- UC11
     Driver --- UC12
+    Driver --- UC22
 
     %% =========================
     %% OPERATION STAFF ASSOCIATIONS
@@ -528,6 +532,7 @@ flowchart LR
     Staff --- UC16
     Staff --- UC17
     Staff --- UC18
+    Staff --- UC22
 
     %% =========================
     %% MANAGEMENT ASSOCIATIONS
@@ -535,6 +540,7 @@ flowchart LR
 
     Management --- UC02
     Management --- UC19
+    Management --- UC22
 
     %% =========================
     %% EXTERNAL SYSTEM ASSOCIATIONS
@@ -555,7 +561,6 @@ flowchart LR
     UC11 -.->|<<include>>| UC21
     UC12 -.->|<<include>>| UC21
     UC18 -.->|<<include>>| UC21
-
 ```
 # ĐẶC TẢ USE CASE – CAB SYSTEM
 
@@ -1070,7 +1075,30 @@ flowchart LR
 | **Luồng sự kiện ngoại lệ (Exception flow)** | |
 | 5.1. Gửi thông báo thất bại. | 5.2. Ghi nhận lỗi và xử lý lại theo chính sách. |
 | 4.1. Nhà cung cấp không phản hồi. | 4.2. Ghi nhận lỗi nhưng không làm gián đoạn chức năng đặt xe. |
+---
 
+## UC22 – Đăng xuất
+
+| **Đặc tả Use Case** | **Nội dung** |
+|---|---|
+| **Tên use case** | Đăng xuất |
+| **Mô tả sơ lược** | Cho phép người dùng hủy phiên làm việc (Session/Token) hiện tại và thoát khỏi hệ thống an toàn. |
+| **Actor chính** | Khách hàng / Tài xế / Nhân viên vận hành / Ban lãnh đạo |
+| **Actor phụ** | Hệ thống CAB |
+| **Tiền điều kiện (Pre-condition)** | Người dùng đang trong trạng thái đăng nhập hệ thống. |
+| **Hậu điều kiện (Post-condition)** | Phiên làm việc bị thu hồi/xóa, người dùng quay về màn hình đăng nhập và không thể truy cập các chức năng nội bộ nếu không đăng nhập lại. |
+| **Luồng sự kiện chính (Main flow)** | |
+| **Actor** | **System** |
+| 1. Chọn chức năng "Đăng xuất". | 2. Hiển thị hộp thoại xác nhận đăng xuất (nếu có). |
+| 3. Xác nhận đồng ý đăng xuất. | 4. Thu hồi/Hủy bỏ Refresh Token và Access Token hiện tại của phiên làm việc. |
+| | 5. Xóa thông tin phiên làm việc lưu tại thiết bị/trình duyệt người dùng (Cookie/Local Storage). |
+| | 6. (Đối với Tài xế) Tự động chuyển trạng thái hoạt động về OFFLINE. |
+| | 7. Chuyển hướng người dùng về màn hình Đăng nhập. |
+| | 8. Thông báo đã đăng xuất thành công. |
+| **Luồng sự kiện thay thế (Alternate flow)** | |
+| 3.1. Người dùng chọn "Hủy" trên hộp thoại xác nhận. | 3.2. Đóng hộp thoại xác nhận, giữ nguyên trạng thái đăng nhập hiện tại của người dùng. |
+| **Luồng sự kiện ngoại lệ (Exception flow)** | |
+| 4.1. Mất kết nối mạng trong quá trình gọi API đăng xuất. | 4.2. Hệ thống vẫn chủ động xóa Token cục bộ trên thiết bị/trình duyệt, chuyển người dùng về màn hình Đăng nhập và hiển thị thông báo "Đã đăng xuất offline". |
 
 ## Business Process – CAB System
 
@@ -1280,3 +1308,4 @@ flowchart TD
 | **RULE-33** | **UC19** | Xem báo cáo hoạt động | Ban lãnh đạo | Ban lãnh đạo được xem các báo cáo tổng hợp về hoạt động hệ thống để theo dõi tình hình vận hành và hỗ trợ việc ra quyết định. |
 | **RULE-34** | **ALL UC** | Bảo vệ dữ liệu | Hệ thống CAB | Hệ thống phải bảo vệ dữ liệu khỏi truy cập trái phép và chỉ cho phép người dùng truy cập dữ liệu phù hợp với vai trò và quyền được cấp. |
 | **RULE-35** | **ALL UC** | Lưu vết thao tác | Nhân viên vận hành, Ban lãnh đạo, Hệ thống CAB | Các thao tác quản trị quan trọng phải được hệ thống ghi nhận đầy đủ người thực hiện, thời gian và nội dung thao tác để phục vụ kiểm tra và truy vết khi cần thiết. |
+| **RULE-36** | **UC22** | Đăng xuất và Hủy phiên làm việc | Tất cả người dùng | Khi người dùng thực hiện đăng xuất, hệ thống phải ngay lập tức thu hồi/vô hiệu hóa Access Token và Refresh Token hiện tại, dọn dẹp toàn bộ dữ liệu phiên lưu đệm ở máy khách. Nếu là Tài xế, hệ thống phải tự động chuyển trạng thái hoạt động về `OFFLINE` để ngừng nhận phân công chuyến xe mới. |
